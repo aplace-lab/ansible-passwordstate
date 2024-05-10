@@ -1,0 +1,13 @@
+namespace: ansible
+name: passwordstate
+version: 0.1.0
+readme: README.md
+authors:
+- Aaron Place <aaronplace9@gmail.com>
+description: Collection for retrieving passwords from Passwordstate for use in Ansible plays
+license:
+- MIT
+repository: https://github.com/aplace-lab/ansible-passwordstate
+documentation: https://github.com/aplace-lab/ansible-passwordstate
+homepage: https://github.com/aplace-lab/ansible-passwordstate
+issues: https://github.com/aplace-lab/ansible-passwordstate/issues
