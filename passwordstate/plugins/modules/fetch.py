@@ -106,7 +106,8 @@ def main():
     password = Password(api, module.params['list_id'], module.params['id'])
 
     result = password.gather_facts()
-    module.exit_json(changed=False, data=result)
+    # Spread the entire result into the response
+    module.exit_json(changed=False, **result)
 
 if __name__ == '__main__':
     main()
