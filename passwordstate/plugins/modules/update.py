@@ -59,7 +59,7 @@ def main():
             'api_key':  {'required': True, 'type': 'str', 'no_log': True},
             'id':       {'required': True, 'type': 'int'},
             'username': {'required': False, 'type': 'str', 'default': None},
-            'password': {'required': False, 'type': 'str', 'no_log': True},
+            'password': {'required': False, 'type': 'str', 'default': None, 'no_log': True},
         },
         required_one_of = [('username', 'password')]
         supports_check_mode=True  # Enable check mode support
