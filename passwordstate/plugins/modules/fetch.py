@@ -15,11 +15,6 @@ options:
       - Passwordstate URL
     required: true
     type: str
-  fact:
-    description:
-      - Name of the fact to set with credentials.
-    required: true
-    type: str
   apikey:
     description:
       - API key used for authentication.
@@ -29,7 +24,7 @@ options:
   list_id:
     description:
       - ID of the password list that contains the password entry.
-    required: true
+    required: false
     type: int
   id:
     description:
@@ -43,15 +38,14 @@ author:
 EXAMPLES = r'''
 - name: Fetch password details for ID 123
   ansible.passwordstate.fetch:
-    url: "https://passwordstate.example.com"
-    fact: "my_user"
-    apikey: "your_api_key"
-    list_id: "321"
-    id: "123"
+    url: https://passwordstate.example.com
+    apikey: your_api_key
+    id: 123
+  register: my_user
 
 - name: Display password
   ansible.builtin.debug:
-    var: my_user.password
+    var: my_user.Password
 '''
 
 RETURN = r'''
@@ -91,28 +85,18 @@ class Password:
         self.list_id = list_id
         self.id = id
 
-    def gather_facts(self, fact):
+    def gather_facts(self):
         fields = self.api.get_password_fields(self.id)
         if not fields:
             self.module.fail_json(msg="No data received from API")
-        if isinstance(fields, list) and fields:
-            fields = fields[0]
-
-        return {fact: {
-            'username': fields['UserName'],
-            'password': fields['Password'],
-            'title': fields['Title'],
-            'description': fields['Description'],
-            'expiry': fields['ExpiryDate']
-        }}
+        return fields
 
 def main():
     module = AnsibleModule(
         argument_spec={
             'url': {'required': True, 'type': 'str'},
-            'fact': {'required': True, 'type': 'str'},
             'apikey': {'required': True, 'type': 'str', 'no_log': True},
-            'list_id': {'required': True, 'type': 'int'},
+            'list_id': {'required': False, 'type': 'int'},
             'id': {'required': True, 'type': 'int'},
         },
         supports_check_mode=False
@@ -121,8 +105,8 @@ def main():
     api = Passwordstate(module, module.params['url'], module.params['apikey'])
     password = Password(api, module.params['list_id'], module.params['id'])
 
-    facts = password.gather_facts(module.params['fact'])
-    module.exit_json(changed=False, ansible_facts=facts)
+    result = password.gather_facts()
+    module.exit_json(changed=False, data=result)
 
 if __name__ == '__main__':
     main()
