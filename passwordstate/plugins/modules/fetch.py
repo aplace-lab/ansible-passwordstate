@@ -93,10 +93,10 @@ class Password:
 def main():
     module = AnsibleModule(
         argument_spec={
-            'url': {'required': True, 'type': 'str'},
-            'api_key': {'required': True, 'type': 'str', 'no_log': True},
-            'list_id': {'required': False, 'type': 'int'},
-            'id': {'required': True, 'type': 'int'},
+            'url':      {'required': True, 'type': 'str'},
+            'api_key':  {'required': True, 'type': 'str', 'no_log': True},
+            'list_id':  {'required': False, 'type': 'int'},
+            'id':       {'required': True, 'type': 'int'},
         },
         supports_check_mode=False
     )
