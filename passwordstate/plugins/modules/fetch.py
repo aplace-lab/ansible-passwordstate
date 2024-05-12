@@ -4,18 +4,17 @@
 DOCUMENTATION = r'''
 ---
 module: fetch
-short_description: Retrieve passwords from Passwordstate
+short_description: Return password information for a password ID
 version_added: 0.1.0
 description:
-  - This module retrieves username and password information from Passwordstate using an API token.
-  - Creates a fact that contains credentials to use in other modules.
+  - Return password information for a password ID
 options:
   url:
     description:
       - Passwordstate URL
     required: true
     type: str
-  apikey:
+  api_key:
     description:
       - API key used for authentication.
     required: true
@@ -39,7 +38,7 @@ EXAMPLES = r'''
 - name: Fetch password details for ID 123
   ansible.passwordstate.fetch:
     url: https://passwordstate.example.com
-    apikey: your_api_key
+    api_key: your_api_key
     id: 123
   register: my_user
 
@@ -95,14 +94,14 @@ def main():
     module = AnsibleModule(
         argument_spec={
             'url': {'required': True, 'type': 'str'},
-            'apikey': {'required': True, 'type': 'str', 'no_log': True},
+            'api_key': {'required': True, 'type': 'str', 'no_log': True},
             'list_id': {'required': False, 'type': 'int'},
             'id': {'required': True, 'type': 'int'},
         },
         supports_check_mode=False
     )
 
-    api = Passwordstate(module, module.params['url'], module.params['apikey'])
+    api = Passwordstate(module, module.params['url'], module.params['api_key'])
     password = Password(api, module.params['list_id'], module.params['id'])
 
     result = password.gather_facts()

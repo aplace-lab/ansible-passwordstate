@@ -1,10 +1,10 @@
 import requests
 
 class Passwordstate:
-    def __init__(self, module, url, apikey):
+    def __init__(self, module, url, api_key):
         self.module = module
         self.url = url
-        self.apikey = apikey
+        self.api_key = api_key
 
     def get_password_fields(self, id):
         response = self._request('passwords/' + str(id), 'GET')
@@ -22,7 +22,7 @@ class Passwordstate:
             'GET': requests.get,
             'PUT': requests.put
         }
-        headers = {'APIKey': self.apikey, 'Content-Type': 'application/json'}
+        headers = {'api_key': self.api_key, 'Content-Type': 'application/json'}
         try:
             response = methods[method](self.url + '/api/' + uri, headers=headers, params=params, json=json)
             response.raise_for_status()
